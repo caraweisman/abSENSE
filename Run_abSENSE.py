@@ -28,6 +28,7 @@ parser.add_argument("--Eval", default=0.001, type=float, help="Optional. E-value
 parser.add_argument("--includeonly", type=str, help="Optional. Species whose orthologs' bitscores will be included in fit; all others will be omitted. Default is all species. Format as species names, exactly as in input files, separated by commas (no spaces).")
 parser.add_argument("--genelenfile", type=str, help="Optional. File containing lengths (aa) of all genes to be analyzed. Used to accurately calculate E-value threshold. Default is 400aa for all genes. Only large deviations will qualitatively affect results.")
 parser.add_argument("--dblenfile", type=str, help="Optional. File containing size (aa) of databases on which the anticipated homology searches will be performed. Species-specific. Used to accurately calculate E-value threshold. Default is 400aa/gene * 20,000 genes for each species, intended to be the size of an average proteome. Only large deviations will significantly affect results.")
+parser.add_argument("--predall", type=bool, default=False, help="Optional. True: Predicts bitscores and P(detectable) of homologs in all species, including those in which homologs were actually detected. Default is False: only make predictions for homologs that seem to be absent.")
 now = datetime.now()
 starttime = now.strftime("%m.%d.%Y_%H.%M")
 parser.add_argument("--out", type=str, default='abSENSE_results_' + starttime, help="Optional. Name of directory for output data. Default is date and time when analysis was run.")
@@ -266,7 +267,7 @@ print 'Running!'
 
 for i in range(0, len(genelist)):
         # report current position and gene name
-	print i, ' out of ', str(len(genelist)), ':', genelist[i]
+	print 'gene', i, 'out of', str(len(genelist)), ':', genelist[i]
 	
 	# print current gene to output file
 	mloutputfile.write(genelist[i])
@@ -339,12 +340,17 @@ for i in range(0, len(genelist)):
                                         lowboundoutputfile.write('\t' + str(round(lowprediction,2)))
                                         pvaloutputfile.write('\t' + str(round(pval,2)))
                                 elif rawdistances[invordervec[j]] in truncdistances:
-                                        realscore = genebitscores[truncdistances.index(rawdistances[invordervec[j]])]
-                                        mloutputfile.write('\t' + str(prediction) + '(Det:' + str(realscore) + ')')
-                                        highboundoutputfile.write('\t' + str(round(highprediction,2)) + '(Det)')
-                                        lowboundoutputfile.write('\t' + str(round(lowprediction,2)) + '(Det)')
-                                        pvaloutputfile.write('\t' + str(round(pval,2)) + '(Det)')
-                                        
+                                        if args.predall == True:
+                                                realscore = genebitscores[truncdistances.index(rawdistances[invordervec[j]])]
+                                                mloutputfile.write('\t' + str(prediction) + '(Det:' + str(realscore) + ')')
+                                                highboundoutputfile.write('\t' + str(round(highprediction,2)) + '(Det)')
+                                                lowboundoutputfile.write('\t' + str(round(lowprediction,2)) + '(Det)')
+                                                pvaloutputfile.write('\t' + str(round(pval,2)) + '(Det)')
+                                        elif args.predall == False:
+                                                mloutputfile.write('\t' + 'Detected')
+                                                highboundoutputfile.write('\t' + 'Detected')
+                                                lowboundoutputfile.write('\t' + 'Detected')
+                                                pvaloutputfile.write('\t' + 'Detected')                                               
                         mloutputfile.write('\n')
                         highboundoutputfile.write('\n')
                         lowboundoutputfile.write('\n')
