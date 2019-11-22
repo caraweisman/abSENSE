@@ -1,6 +1,6 @@
 # abSENSE: a method to interpret undetected homologs
 
-__0. INTRODUCTION__ 
+## __0. INTRODUCTION__ 
 
 Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a BLAST (or similar methods) homology search in a given species if the gene is evolving normally. 
 
@@ -12,7 +12,7 @@ By calculating the probability that a homology search would fail to detect a hom
 
 The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself, however, is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss). This code is applicable to all such cases. 
 
-__1. RUNNING abSENSE: THE BASICS__
+## __1. RUNNING abSENSE: THE BASICS__
 
 The main analysis script, which will generate bitscore and detectability predictions for an arbitrary number of genes, is __Run\_abSENSE.py__. To predict the bitscores/E-values of a gene from some particular "focal" species in N other species, it needs at minimum two input files: 
 
@@ -55,7 +55,7 @@ The same results as above will be computed, but here they will be output to the 
 
 
 
-__2. ADVANCED OPTIONS__
+## __2. ADVANCED OPTIONS__
 
 You can specify advanced options with additional command line options. You can view them all by typing
 
@@ -85,7 +85,7 @@ For example, to run an analysis on all S. cerevisiae proteins in the selected fu
 __python abSENSE_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --genelenfile Fungi_Data/S_cer_Protein_Lengths --dblenfile Fungi_Data/Fungi_Database_Lengths
 
 
-__3: INPUT FILE FORMATS__
+## __3: INPUT FILE FORMATS__
 
 Required files:
 
