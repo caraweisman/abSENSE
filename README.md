@@ -108,7 +108,7 @@ __a) Detection\_failure\_probabilities__
 
 The central output of the program. For each gene in the analysis, this contains the predicted probability that a homolog in each species would be undetected at the specified E-value by a homology search, even if the homolog were present.
 
-By default, this is only calculated in species in which the gene was not detected, indicated in the file by the relevant cell reading "detected". The setting --predall will calculate this value for all species, even those in which a homolog was in fact detected.
+By default, this is only calculated in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculate this value for all species, even those in which a homolog was in fact detected.
 
 If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
 
@@ -116,7 +116,7 @@ __b) Predicted\_bitscores__
 
 For each gene in the analysis, this contains the predicted (maximum likliehood) bitscore of a homolog in each species.
 
-By default, bitscores are only predicted in species in which the gene was not detected: this is indicated in the file by the relevant cell reading "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
+By default, bitscores are only predicted in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
 
 If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
 
@@ -124,7 +124,7 @@ __c) Bitscore\_99PI\_upperbound\_predictions__
 
 For each gene in the analysis, this contains the upper bound of the 99\% confidence interval for the bitscore of a homolog in each species.
 
-By default, this is only calculated in species in which the gene was not detected: this is indicated in the file by the relevant cell reading "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
+By default, this is only calculated in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
 
 If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
 
@@ -132,7 +132,7 @@ __d) Bitscore\_99PI\_lowerbound\_predictions__
 
 For each gene in the analysis, this contains the lower bound of the 99\% confidence interval for the bitscore of a homolog in each species.
 
-By default, this is only calculated in species in which the gene was not detected: this is indicated in the file by the relevant cell reading "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
+By default, this is only calculated in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
 
 If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
 
