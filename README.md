@@ -12,9 +12,9 @@ By calculating the probability that a homology search would fail to detect a hom
 
 The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
-## __ ANALYZING ONLY A FEW GENES? DON'T NEED SOPHISTICATED OPTIONS? CONSIDER OUR WEBSITE! __
+## __WEBSITE (GUI!) AVAILABLE FOR SIMPLE ANALYSES__
 
-We have a GUI website that can perform basic single-gene analyses that don't invoke the advanced command line options available here (see below). If this is your case, you may find it easier to use than downloading and running this code on the command line.
+We have a GUI website that can perform basic single-gene analyses that don't require the advanced command line options available here (see below). If this is your case, you may find it easier to use than downloading and running this code on the command line.
 
 The website is available at: LINK
 
@@ -100,9 +100,9 @@ __python abSENSE_run.py --distfile Fungi\_Data/Fungi\_Distances --scorefile Fung
 The visualization script __abSENSE\_plot.py__ takes all of the same options, with the exception of again requiring that the gene to be analyzed is specified by the --gene option, and also that the --genelenfile option is instead --genelen, after which should be entered an integer corresponding to the length of the gene. (With a single gene, it's hardly worth requiring a whole file: just give the number.)
 
 
-## __3: OUTPUT FILES_
+## __3: OUTPUT FILES__
 
-__Run\_abSENSE.py__ outputs five output files. Examples resulting from running abSENSE on the provided insect and fungal data can be found in Fungi\_Data/Fungi\_abSENSE_Results/ and Insect\_Data/Insect\_abSENSE_Results/ respectively.
+__Run\_abSENSE.py__ outputs six output files. Examples resulting from running abSENSE on the provided insect and fungal data can be found in Fungi\_Data/Fungi\_abSENSE_Results/ and Insect\_Data/Insect\_abSENSE_Results/ respectively.
 
 __a) Detection\_failure\_probabilities__
 
@@ -128,7 +128,7 @@ By default, this is only calculated in species in which the gene was not detecte
 
 If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
 
-__c) Bitscore\_99PI\_lowerbound\_predictions__
+__d) Bitscore\_99PI\_lowerbound\_predictions__
 
 For each gene in the analysis, this contains the lower bound of the 99\% confidence interval for the bitscore of a homolog in each species.
 
@@ -136,13 +136,13 @@ By default, this is only calculated in species in which the gene was not detecte
 
 If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
 
-__d) Parameter\_values __
+__e) Parameter\_values__
 
 For each gene in the analysis, this contains the best-fit (maximum likelihood) values of the a and b parameters. (See PAPER CITATION for explanation.) 
 
 These a and b parameters are calculated from bitscores of homologs in species included in the prediction process. If the command line option --includeonly is used, this will be only the species specified by that option. By default, all provided bitscores are used.
 
-__e) Run\_info__
+__f) Run\_info__
 
 Contains information about the analysis, including names of input files, options/settings used, and the analysis time.
 
