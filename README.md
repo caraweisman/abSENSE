@@ -14,6 +14,8 @@ The method is explained in further detail in the paper (citation). There, it is 
 
 ## __2. RUNNING abSENSE: THE BASICS__
 
+### Quickstart: main analysis
+
 The main analysis script, __Run\_abSENSE.py__, calculates the expected bitscores and probabilities of being undetected for an arbitrary number of genes from some particular "focal" species in N other species. It requires a minimum of two input files:
 
 i) A file containing the bitscores of homologs of the genes to be analyzed in at least three of the  species (including the focal species itself, so two others). 
@@ -41,6 +43,9 @@ c) The overall probability of a homolog being undetected in each of these specie
 These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below). Additional information on these output files is below.
 
 
+
+
+### Quickstart: visualization
 
 A supplemental visualization script, __Plot_abSENSE.py__, performs the same analysis as above, but for one gene at a time, and also produces a visualization of the results (see PAPER CITATION).
 It is run in the same way, except that it also requires specifying which single gene in the bitscore input file you wish to analyze.
