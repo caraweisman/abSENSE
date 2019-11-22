@@ -1,6 +1,6 @@
 # abSENSE: a method to interpret undetected homologs
 
-## __1. INTRODUCTION__ 
+## __INTRODUCTION__ 
 
 Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a homology search (using BLAST or a similar method) in a given species if the gene is evolving normally. 
 
@@ -12,7 +12,13 @@ By calculating the probability that a homology search would fail to detect a hom
 
 The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
-## __2. RUNNING abSENSE: THE BASICS__
+## __ ANALYZING ONLY A FEW GENES? DON'T NEED SOPHISTICATED OPTIONS? CONSIDER OUR WEBSITE! __
+
+We have a GUI website that can perform basic single-gene analyses that don't invoke the advanced command line options available here (see below). If this is your case, you may find it easier to use than downloading and running this code on the command line.
+
+The website is available at: LINK
+
+## __1. RUNNING abSENSE: THE BASICS__
 
 ### Quickstart: main analysis
 
@@ -88,10 +94,59 @@ __--includeonly__: Allows you to restrict the species whose bitscores are used i
 
 For example, to run an analysis on all S. cerevisiae proteins in the selected fungal species in which the lengths of each S. cerevisiae protein and the sizes of each species' search database (their annotated proteomes as indicated in the supplement of PAPER CITATION) are specified:
 
-__python abSENSE_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --genelenfile Fungi_Data/S_cer_Protein_Lengths --dblenfile Fungi_Data/Fungi_Database_Lengths
+__python abSENSE_run.py --distfile Fungi\_Data/Fungi\_Distances --scorefile Fungi\_Data/Fungi\_Bitscores --genelenfile Fungi_Data/S\_cer\_Protein\_Lengths --dblenfile Fungi\_Data/Fungi\_Database\_Lengths__
 
 
-## __3: INPUT FILE FORMATS__
+The visualization script __abSENSE\_plot.py__ takes all of the same options, with the exception of again requiring that the gene to be analyzed is specified by the --gene option, and also that the --genelenfile option is instead --genelen, after which should be entered an integer corresponding to the length of the gene. (With a single gene, it's hardly worth requiring a whole file: just give the number.)
+
+
+## __3: OUTPUT FILES_
+
+__Run\_abSENSE.py__ outputs five output files. Examples resulting from running abSENSE on the provided insect and fungal data can be found in Fungi\_Data/Fungi\_abSENSE_Results/ and Insect\_Data/Insect\_abSENSE_Results/ respectively.
+
+__a) Detection\_failure\_probabilities__
+
+The central output of the program. For each gene in the analysis, this contains the predicted probability that a homolog in each species would be undetected at the specified E-value by a homology search, even if the homolog were present.
+
+By default, this is only calculated in species in which the gene was not detected, indicated in the file by the relevant cell reading "detected". The setting --predall will calculate this value for all species, even those in which a homolog was in fact detected.
+
+If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+
+__b) Predicted\_bitscores__
+
+For each gene in the analysis, this contains the predicted (maximum likliehood) bitscore of a homolog in each species.
+
+By default, bitscores are only predicted in species in which the gene was not detected: this is indicated in the file by the relevant cell reading "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
+
+If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+
+__c) Bitscore\_99PI\_upperbound\_predictions__
+
+For each gene in the analysis, this contains the upper bound of the 99\% confidence interval for the bitscore of a homolog in each species.
+
+By default, this is only calculated in species in which the gene was not detected: this is indicated in the file by the relevant cell reading "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
+
+If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+
+__c) Bitscore\_99PI\_lowerbound\_predictions__
+
+For each gene in the analysis, this contains the lower bound of the 99\% confidence interval for the bitscore of a homolog in each species.
+
+By default, this is only calculated in species in which the gene was not detected: this is indicated in the file by the relevant cell reading "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
+
+If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+
+__d) Parameter\_values __
+
+For each gene in the analysis, this contains the best-fit (maximum likelihood) values of the a and b parameters. (See PAPER CITATION for explanation.) 
+
+These a and b parameters are calculated from bitscores of homologs in species included in the prediction process. If the command line option --includeonly is used, this will be only the species specified by that option. By default, all provided bitscores are used.
+
+__e) Run\_info__
+
+Contains information about the analysis, including names of input files, options/settings used, and the analysis time.
+
+## __4: INPUT FILE FORMATS__
 
 Required files:
 
@@ -131,4 +186,9 @@ The second column should contain the sizes, in amino acids, of the database in w
 If you don't already have such a file, you can make one easily if you have the databases themselves in eg FASTA format (again requiring the easel package, downloadable with HMMER as in c) above:
 just run the command
 __esl-seqstat (FASTA FILE)__
-on each database; this will report the total length in aa of each database file. You can then put these into a tab-delimited file manually. 
+on each database; this will report the total length in aa of each database file. You can then put these into a tab-delimited file manually.
+
+## __5: QUESTIONS?__
+
+If you have questions, concerns, or suspect a bug, please contact me at weisman@g.harvard.edu. 
+
