@@ -18,7 +18,7 @@ The main analysis script, which will generate bitscore and detectability predict
 
 i) A file containing the bitscores of homologs of the genes to be analyzed in at least three of the  species (including the focal species itself, so two others). 
 
-ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. (The distance between the focal species and itself is 0.)
+ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. (The distance between the focal species and itself is 0.) If you don't already have such distances, a description of how to calculate them relatively painlessly can be found in PAPER CITATION.
 
 Examples of both of these files can be found for the fungal and insect lineages analyzed in (paper citation). The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. They exemplify the formatting required for abSENSE to run (explained in more detail below).
 
@@ -45,17 +45,17 @@ These results will be output to a set of tab-delimited files in a separate direc
 There is also a supplemental visualization script, __Plot_abSENSE.py__, which performs the same analysis as above, but for a single gene at a time, and also produces a visualization of the results (see PAPER CITATION).
 It is run in the same way as above, except that it also requires specifying which gene in the bitscore input file you wish to analyze. To run abSENSE on a given bitscore and distance file, on GENEID contained in the bitscore file, simply type:
 
-__python abSENSE_run.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE) --gene GENEID__
+__python abSENSE_plot.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE) --gene GENEID__
 
 For example, to analyze the S. cerevisiae gene Uli1, listed in the bitscore file unde its RefSeq ID (NP_116682.3), type:
 
-__python abSENSE_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --gene NP_116682.3__
+__python abSENSE_plot.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --gene NP_116682.3__
 
 The same results as above will be computed, but here they will be output to the terminal, after which the visualiation will be shown.
 
 
 
-__2.ADVANCED OPTIONS__
+__2. ADVANCED OPTIONS__
 
 You can specify advanced options with additional command line options. You can view them all by typing
 
@@ -69,12 +69,60 @@ __--Eval__: The E-value threshold to be used (above this value, homologs will be
 
 __--genelenfile__: Allows you to provide a file containing the lengths (in aa) of all genes in the bitscore file to be analyzed. abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs (see below) and the length of the gene being searched. Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. The default value is 400 amino acids (~average protein size in many species).
 
+Examples of such files containing the lengths of all S. cerevisiae and D. melanogaster genes can be found in Fungi\_Data/S\_cer\_Protein\_Lengths and Insect\_Data/D\_mel\_Protein\_Lengths. The format required is described more below.
+
 __--dblenfile__: Allows you to provide a file containing the sizes (in aa) of the database in which the homology search for each of your N species is performed. abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs and the length of the gene being searched (see above). Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. The default value is 400 amino acids * 20,000 amino acids / gene = 8,000,000 amimo acids (~average protein and proteome size in many species)..
+
+Examples containing the lengths of all S. cerevisiae and D. melanogaster genes can be found in Fungi\_Data/Fungi_Database_Lengths and Insect\_Data/Insect\_Database\_Lengths. The format required is described more below.
 
 __--predall__: Default is False. When True, Causes abSENSE to predict bitscores, confidence intervals, and probability of being undetected not only in species in which homologs are actually undetected, but also for species in which homologs are detected. This is obviously not the main use case, and is especially uninformative when those homologs and their bitscores have been used in the prediction itself (see below). May potentially be useful to see if a homolog in one species, although detected, seems to be behaving anomalously compared to those in other species (eg due to rate acceleration). 
 
 __--includeonly__: Allows you to restrict the species whose bitscores are used in predicting bitscores in other species. Mainly useful to do control-type analyses, such as Figure 5 in (PAPER CITATION), to show that predictions made from only a subset of the data are nonetheless reliable. If not specified, abSENSE uses all available bitscores in the prediction. 
 
 
+For example, to run an analysis on all S. cerevisiae proteins in the selected fungal species in which the lengths of each S. cerevisiae protein and the sizes of each species' search database (their annotated proteomes as indicated in the supplement of PAPER CITATION) are specified:
 
-__N: FILE FORMAT__
+__python abSENSE_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --genelenfile Fungi_Data/S_cer_Protein_Lengths --dblenfile Fungi_Data/Fungi_Database_Lengths
+
+
+__3: INPUT FILE FORMATS__
+
+Required files:
+
+__a) The bitscore file__
+
+For an analysis of M genes in N species (including the focal species), the bitscore file should be a tab-delimited file of N+1 columns by M+1 rows.
+The first row should begin with a blank entry, and should be followed by N entries containing the names of the N species in your analysis. These names should match those in the distance file (below) exactly.
+The remaining M rows should each begin with the name/identifier of the gene from the focal species to be analyzed, followed by the bitscore of that gene against its homolog in the species indicated at the top of the given column. For species in which homologs are undetected, this value should be __0__. For species in which a homolog is detected, but the orthology is unclear and so you wish to exclude it from being used in the fit (see PAPER CITATION), this value should be __'N/A'__.
+Two examples are provided: Fungi\_Data/Fungi_\Bitscores and Insect_\Data/Insect\_Bitscores.
+
+__b) The distance file__
+
+For an analysis with N species (including the focal species), the distance file should be a tab-delimited file of N columns by 2 rows.
+Entries in the first row should contain the name of each species in your analysis. These names should match those in the bitscore file (above) exactly.
+Entries in the second row should contain the evolutionary distance between each species in the indicated column and the focal species. (The distance between the focal species and itself should always be 0.)
+Two examples are provided: Fungi\_Data/Fungi\_Distances and Insect\_Data/Insect\_Distances.
+
+Optional files:
+
+__c) The gene length file__
+
+For an analysis of M genes, the gene length file should be a tab-delimited file of 2 columns by M rows.
+The first column should contain the names/identifiers of the gene from the focal species to be analyzed. These should match exactly the names in the bitscore file (above).
+The second column should contain the length in amino acids of that gene.
+
+If you don't already have such a file, here is a command to make one (named OUTPUTFILENAME), from a FASTA file (SEQFILENAME) containing all of the sequences: (It requires the easel package, which comes with the HMMER software, available at http://hmmer.org/documentation.html.)
+
+__esl-seqstat -a (SEQFILENAME) | awk '{print $2 "\t" $3}' | tac | sed -e '1,7d' | tac > (OUTFILENAME)__
+
+
+__d) The database length file__ 
+
+For an analysis of N species, the database length file should be a tab-delimited file of 2 columns by N rows.
+The first column should contain the names of the N species. These should match exactly the names in the bitscore and distance files (above).
+The second column should contain the sizes, in amino acids, of the database in which the homology search for each species is performed. For example, if you are searching for a gene in each of the species' annotated proteomes, it should be the size of that species' proteome in amino acids. If instead you are searching against a pan-specific database, like for example NR, for all species, it should be the size of that database in amino acids.
+
+If you don't already have such a file, you can make one easily if you have the databases themselves in eg FASTA format (again requiring the easel package, downloadable with HMMER as in c) above:
+just run the command
+__esl-seqstat (FASTA FILE)__
+on each database; this will report the total length in aa of each database file. You can then put these into a tab-delimited file manually. 
