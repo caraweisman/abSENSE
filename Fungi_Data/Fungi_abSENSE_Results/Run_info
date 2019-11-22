@@ -1,0 +1,7 @@
+abSENSE analysis run on 11.21.2019_14.25
+Input bitscore file: Fungi_Data/Fungi_Bitscores
+Input distance file: Fungi_Data/Fungi_Distances
+Gene length file: Fungi_Data/S_cer_Protein_Lengths
+Database length file: Fungi_Data/Fungi_Database_Lengths
+Species used in fit: All (default)
+E-value threshold: 0.001 (default)
