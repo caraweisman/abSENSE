@@ -1,20 +1,20 @@
 # abSENSE: a method to interpret undetected homologs
 
-## __0. INTRODUCTION__ 
+## __1. INTRODUCTION__ 
 
-Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a BLAST (or similar methods) homology search in a given species if the gene is evolving normally. 
+Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a homology search (using BLAST or a similar method) in a given species if the gene is evolving normally. 
 
-The result of this calculation informs how one interprets homologs apparently being missing in some species. One possibility to explain such a result is that the gene is actually absent in that species, which can be biologically interesting (e.g. if due to a gene loss or the birth of a new gene). 
+The result of this calculation informs how one interprets the result of a homolog apparently being missing in a species. One possibility to explain such a result is that the gene is _actually absent_ from the genome in that species: a biological, and potentially interesting (e.g. if due to a gene loss or the birth of a new gene), result. 
 
-But another explanation, often not considered, is that the homolog /is/ present in that species, but that the given homology search method just lacks statistical power to detect it: that is, that the apparent absense of the homolog is due to a technical/statistical limitation, rather than representing true biology.
+A second explanation, often ignored, is that the homolog _is_ present in the genome of that species, but that the homology search merely lacks statistical power to detect it. Here, the apparent absense of the homolog is a technical/statistical limitation, and does not reflect underlying biology.
 
-By calculating the probability that a homology search would fail to detect a homolog /even if one is present/ and /even if it is evolving normally/ (e.g. no rate accelerations on a specific branch, which could be suggestive of biologically interesting changes), abSENSE informs how seriously you take such an apparently absent homolog. If abSENSE calculates a high probability of being undetected, you may not be as inclined to invoke a biological explanation for the result: the null model of homology search failure is sufficient to explain what you observe.
+By calculating the probability that a homology search would fail to detect a homolog _even if one were present_ and _even if it were evolving normally_ (e.g. no rate accelerations on a specific branch, potentially suggestive of biologically interesting changes), abSENSE informs the interpretation of an apparently absent homolog. If abSENSE finds that there is a high probability of a homolog being undetected even if present, you may not be as inclined to invoke a biological explanation for the result: the null model of a failure of the homology search is sufficient to explain what you observe.
 
-The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself, however, is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss). This code is applicable to all such cases. 
+The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
-## __1. RUNNING abSENSE: THE BASICS__
+## __2. RUNNING abSENSE: THE BASICS__
 
-The main analysis script, which will generate bitscore and detectability predictions for an arbitrary number of genes, is __Run\_abSENSE.py__. To predict the bitscores/E-values of a gene from some particular "focal" species in N other species, it needs at minimum two input files: 
+The main analysis script, __Run\_abSENSE.py__, calculates the expected bitscores and probabilities of being undetected for an arbitrary number of genes from some particular "focal" species in N other species. It requires a minimum of two input files:
 
 i) A file containing the bitscores of homologs of the genes to be analyzed in at least three of the  species (including the focal species itself, so two others). 
 
@@ -38,12 +38,13 @@ b) The 99\% confidence interval around this bitscore in each of these species;
 
 c) The overall probability of a homolog being undetected in each of these species. 
 
-These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below).
+These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below). Additional information on these output files is below.
 
 
 
-There is also a supplemental visualization script, __Plot_abSENSE.py__, which performs the same analysis as above, but for a single gene at a time, and also produces a visualization of the results (see PAPER CITATION).
-It is run in the same way as above, except that it also requires specifying which gene in the bitscore input file you wish to analyze. To run abSENSE on a given bitscore and distance file, on GENEID contained in the bitscore file, simply type:
+A supplemental visualization script, __Plot_abSENSE.py__, performs the same analysis as above, but for one gene at a time, and also produces a visualization of the results (see PAPER CITATION).
+It is run in the same way, except that it also requires specifying which single gene in the bitscore input file you wish to analyze.
+To run abSENSE on a given bitscore and distance file, on GENEID contained in the bitscore file, simply type:
 
 __python abSENSE_plot.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE) --gene GENEID__
 
