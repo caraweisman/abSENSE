@@ -55,37 +55,26 @@ The same results as above will be computed, but here they will be output to the 
 
 
 
-__2. RUNNING abSENSE: ADVANCED OPTIONS__
+__2.ADVANCED OPTIONS__
 
-You can specify several advanced options with additional command line options. You can view them all by typing
+You can specify advanced options with additional command line options. You can view them all by typing
 
-__python 
+__python abSENSE_run.py --help__
 
+They are:
 
+__--out__: The prefix of the directory to which your results will be output. If not specified, defaults to the time at which you ran the analysis (to avoid overwriting of results). 
 
+__--Eval__: The E-value threshold to be used (above this value, homologs will be considered undetected). If not specified, the default value of 0.001 (fairly permissive) will be used.
 
-1a) THE BITSCORE FILE 
+__--genelenfile__: Allows you to provide a file containing the lengths (in aa) of all genes in the bitscore file to be analyzed. abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs (see below) and the length of the gene being searched. Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. The default value is 400 amino acids (~average protein size in many species).
 
-Two examples of bitscore files (i) are provided here: Fungi_Data/Fungi_Bitscores and Insect_Data/Insect_Bitscores (used in PAPER CITATION).
+__--dblenfile__: Allows you to provide a file containing the sizes (in aa) of the database in which the homology search for each of your N species is performed. abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs and the length of the gene being searched (see above). Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. The default value is 400 amino acids * 20,000 amino acids / gene = 8,000,000 amimo acids (~average protein and proteome size in many species)..
 
-As in these examples, for an analysis with N species and M genes, the bitscore file should be M + 1 rows by N + 1 columns. The upper-left entry should be blank. The cells in the first row after that should contain the names of the species included in your analysis. All subsequent rows should have as their first entry the name of a gene for which you want to perform an abSENSE analysis, followed by the bitscores of their orthologs in the species indicated in the given column. 
-If no homolog is detected, this should be 0. If a homolog is detected but orthology is unclear and so you would like not to use it in the analysis, you should type 'N/A'. 
+__--predall__: Default is False. When True, Causes abSENSE to predict bitscores, confidence intervals, and probability of being undetected not only in species in which homologs are actually undetected, but also for species in which homologs are detected. This is obviously not the main use case, and is especially uninformative when those homologs and their bitscores have been used in the prediction itself (see below). May potentially be useful to see if a homolog in one species, although detected, seems to be behaving anomalously compared to those in other species (eg due to rate acceleration). 
 
-1b) THE DISTANCE FILE 
+__--includeonly__: Allows you to restrict the species whose bitscores are used in predicting bitscores in other species. Mainly useful to do control-type analyses, such as Figure 5 in (PAPER CITATION), to show that predictions made from only a subset of the data are nonetheless reliable. If not specified, abSENSE uses all available bitscores in the prediction. 
 
-Two examples of distance files (ii) are provided here: Fungi_Data/Fungi_Distances and Insect_Data/Insect_Distances (used in PAPER CITATION). 
-
-As in these examples, for an analysis with N species, the distance file should be 2 rows by N columns. The first row should be the names of the species you are using, coded identically to how they appear in the bitscore file. The second row should be the distance, in substitutions per site, between the "focal" species (eg S. cerevisiae or D. melanogaster in the example files and PAPER CITATION) and the species indicated in the given column.
-
-1c) QUICKSTART
-
-To run abSENSE using these two files, use the two command line options --scorefile and --distfile to indicate the relevant file names: 
-
-_python abSENSE_run.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE)_ 
-
-For example, if you would like to run abSENSE on the example fungal data (containing all S. cerevisiae genes in the current RefSeq annotation and their orthologs in 11 other fungal species), type: 
-
-python absense_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores 
 
 
 __N: FILE FORMAT__
