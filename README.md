@@ -4,15 +4,15 @@
 
 Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a homology search (using BLAST or a similar method) in a given species if the gene is evolving normally. 
 
-The result of this calculation informs how one interprets the result of a homolog apparently being missing in a species. One possibility to explain such a result is that the gene is _actually absent_ from the genome in that species: a biological, and potentially interesting (e.g. if due to a gene loss or the birth of a new gene), result. 
+The result of this calculation informs how one interprets the result of a homology search failing to find homologs of a gene in some species. One possibility to explain such a result is that the gene is _actually absent_ from the genome in that species: a biological, and potentially interesting (e.g. if due to a gene loss or the birth of a new gene), result. 
 
 A second explanation, often ignored, is that the homolog _is_ present in the genome of that species, but that the homology search merely lacks statistical power to detect it. Here, the apparent absense of the homolog is a technical/statistical limitation, and does not reflect underlying biology.
 
-By calculating the probability that a homology search would fail to detect a homolog _even if one were present_ and _even if it were evolving normally_ (e.g. no rate accelerations on a specific branch, potentially suggestive of biologically interesting changes), abSENSE informs the interpretation of an apparently absent homolog. If abSENSE finds that there is a high probability of a homolog being undetected even if present, you may not be as inclined to invoke a biological explanation for the result: the null model of a failure of the homology search is sufficient to explain what you observe.
+By calculating the probability that your homology search would fail to detect a homolog _even if one were present_ and _even if it were evolving normally_ (e.g. no rate accelerations on a specific branch, potentially suggestive of biologically interesting changes), abSENSE informs the interpretation of a negative homology search result. If abSENSE finds that there is a high probability of a homolog being undetected even if present, you may not be as inclined to invoke a biological explanation for the result: the null model of a failure of the homology search is sufficient to explain what you observe.
 
 The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
-## __WEBSITE (GUI!) AVAILABLE FOR SIMPLE ANALYSES__
+## __GUI WEBSITE AVAILABLE FOR SIMPLE ANALYSES__
 
 We have a GUI website that can perform basic single-gene analyses that don't require the advanced command line options available here (see below). If this is your case, you may find it easier to use than downloading and running this code on the command line.
 
@@ -22,15 +22,15 @@ The website is available at: LINK
 
 ### Quickstart: main analysis
 
-The main analysis script, __Run\_abSENSE.py__, calculates the expected bitscores and probabilities of being undetected for an arbitrary number of genes from some particular "focal" species in N other species. It requires a minimum of two input files:
+The main analysis script, __Run\_abSENSE.py__, calculates the probabilities of homologs of genes from some "focal" species being undetected in a set of N other species. It can perform this analysis for an arbitrary number of genes in the taxon at one time. It requires a minimum of two input files:
 
-i) A file containing the bitscores of homologs of the genes to be analyzed in at least three of the  species (including the focal species itself, so two others). 
+i) A file containing the bitscores of homologs of each gene to be analyzed in at least three of the species (including the focal species itself, so two others). 
 
-ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. (The distance between the focal species and itself is 0.) If you don't already have such distances, a description of how to calculate them relatively painlessly can be found in PAPER CITATION.
+ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. The distance between the focal species and itself should be 0. (If you don't already have such distances, a description of how to calculate them relatively painlessly can be found in PAPER CITATION.)
 
 Examples of both of these files can be found for the fungal and insect lineages analyzed in (paper citation). The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. They exemplify the formatting required for abSENSE to run (explained in more detail below).
 
-To run abSENSE on a given bitscore and distance file, simply type:
+To run abSENSE on a given bitscore and distance file, type:
 
 __python abSENSE_run.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE)__
     
@@ -40,11 +40,11 @@ __python abSENSE_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_
 
 For each gene in the input bitscore file, the following will be computed:
 
-a) The expected bitscore in each species in which no homolog was detected;
+a) The probabilities of a homolog being undetected in each species;
 
-b) The 99\% confidence interval around this bitscore in each of these species;
+b) The expected bitscores of homologs in each species;
 
-c) The overall probability of a homolog being undetected in each of these species. 
+c) The 99\% confidence interval around this bitscore in each species.
 
 These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below). Additional information on these output files is below.
 
@@ -55,7 +55,8 @@ These results will be output to a set of tab-delimited files in a separate direc
 
 A supplemental visualization script, __Plot_abSENSE.py__, performs the same analysis as above, but for one gene at a time, and also produces a visualization of the results (see PAPER CITATION).
 It is run in the same way, except that it also requires specifying which single gene in the bitscore input file you wish to analyze.
-To run abSENSE on a given bitscore and distance file, on GENEID contained in the bitscore file, simply type:
+
+To run abSENSE on gene GENEID contained in a given bitscore with a given distance file, type:
 
 __python abSENSE_plot.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE) --gene GENEID__
 
@@ -63,31 +64,34 @@ For example, to analyze the S. cerevisiae gene Uli1, listed in the bitscore file
 
 __python abSENSE_plot.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --gene NP_116682.3__
 
-The same results as above will be computed, but here they will be output to the terminal, after which the visualiation will be shown.
-
+The same results as above will be computed, but now they will be output to the terminal, and then the visualiation will be shown.
 
 
 ## __2. ADVANCED OPTIONS__
 
-You can specify advanced options with additional command line options. You can view them all by typing
+You can specify advanced options with the additional command line options. You can view them all by typing
 
 __python abSENSE_run.py --help__
 
 They are:
 
-__--out__: The prefix of the directory to which your results will be output. If not specified, defaults to the time at which you ran the analysis (to avoid overwriting of results). 
+__--out__: The prefix of the directory to which your results will be output. Default is the time at which you ran the analysis (to avoid overwriting of results). 
 
-__--Eval__: The E-value threshold to be used (above this value, homologs will be considered undetected). If not specified, the default value of 0.001 (fairly permissive) will be used.
+__--Eval__: The E-value threshold to be used (above this value, homologs will be considered undetected). Default is 0.001 (fairly permissive).
 
-__--genelenfile__: Allows you to provide a file containing the lengths (in aa) of all genes in the bitscore file to be analyzed. abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs (see below) and the length of the gene being searched. Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. The default value is 400 amino acids (~average protein size in many species).
+__--genelenfile__: Allows you to specify a file containing the lengths (in aa) of all genes in the bitscore file to be analyzed. Default is 400 amino acids (~average protein size in many species) for all proteins.
+
+abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs (see below) and the length of the gene being searched. Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. 
 
 Examples of such files containing the lengths of all S. cerevisiae and D. melanogaster genes can be found in Fungi\_Data/S\_cer\_Protein\_Lengths and Insect\_Data/D\_mel\_Protein\_Lengths. The format required is described more below.
 
-__--dblenfile__: Allows you to provide a file containing the sizes (in aa) of the database in which the homology search for each of your N species is performed. abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs and the length of the gene being searched (see above). Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. The default value is 400 amino acids * 20,000 amino acids / gene = 8,000,000 amimo acids (~average protein and proteome size in many species)..
+__--dblenfile__: Allows you to specify a file containing the sizes (in aa) of the database in which the homology search for each of your N species is performed. Default is 400 amino acids * 20,000 amino acids / gene = 8,000,000 amimo acids (~average protein and proteome size in many species) for all species.
+
+abSENSE predicts a bitscore, which is then converted to an E-value to determine detectability; this conversation technically requires knowledge of both the size of the database in which the search occurs and the length of the gene being searched (see above). Because the conversion between these values and E-value is logarithmic, though, only fairly large changes in these values substantially affect results. 
 
 Examples containing the lengths of all S. cerevisiae and D. melanogaster genes can be found in Fungi\_Data/Fungi_Database_Lengths and Insect\_Data/Insect\_Database\_Lengths. The format required is described more below.
 
-__--predall__: Default is False. When True, Causes abSENSE to predict bitscores, confidence intervals, and probability of being undetected not only in species in which homologs are actually undetected, but also for species in which homologs are detected. This is obviously not the main use case, and is especially uninformative when those homologs and their bitscores have been used in the prediction itself (see below). May potentially be useful to see if a homolog in one species, although detected, seems to be behaving anomalously compared to those in other species (eg due to rate acceleration). 
+__--predall__: Default is False. When True, Causes abSENSE to calculate the probability of homologs being undetected, the expected bitscores, and 99\% confidence intervals not only in species in which homologs were actually undetected, but also for species in which homologs have been found. This is obviously not the main use case, and is especially uninformative when those homologs and their bitscores have been used in the prediction itself (see below). May potentially be useful to see if a homolog in one species, although detected, seems to be behaving anomalously compared to those in other species (eg due to rate acceleration). 
 
 __--includeonly__: Allows you to restrict the species whose bitscores are used in predicting bitscores in other species. Mainly useful to do control-type analyses, such as Figure 5 in (PAPER CITATION), to show that predictions made from only a subset of the data are nonetheless reliable. If not specified, abSENSE uses all available bitscores in the prediction. 
 
@@ -110,7 +114,7 @@ The central output of the program. For each gene in the analysis, this contains 
 
 By default, this is only calculated in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculate this value for all species, even those in which a homolog was in fact detected.
 
-If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+If not enough data for a gene was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the results will read "not\_enough\_data".
 
 __b) Predicted\_bitscores__
 
@@ -118,7 +122,7 @@ For each gene in the analysis, this contains the predicted (maximum likliehood) 
 
 By default, bitscores are only predicted in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
 
-If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+If not enough data for a gene was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the results will read "not\_enough\_data".
 
 __c) Bitscore\_99PI\_upperbound\_predictions__
 
@@ -126,7 +130,7 @@ For each gene in the analysis, this contains the upper bound of the 99\% confide
 
 By default, this is only calculated in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
 
-If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+If not enough data for a gene was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the results will read "not\_enough\_data".
 
 __d) Bitscore\_99PI\_lowerbound\_predictions__
 
@@ -134,13 +138,15 @@ For each gene in the analysis, this contains the lower bound of the 99\% confide
 
 By default, this is only calculated in species in which the gene was not detected. Results for species in which homologs were detected are therefore listed as "detected". The setting --predall will calculates this value for all species, even those for which a homolog was in fact detected. Here, the known bitscore (often used in the prediction process; see the option --includeonly) will be shown alongside the prediction. If the known bitscore was used in the fitting process, of course, these will usually be quite similar! 
 
-If not enough data was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the relevant entry will read "not\_enough\_data".
+If not enough data for a gene was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the results will read "not\_enough\_data".
 
 __e) Parameter\_values__
 
 For each gene in the analysis, this contains the best-fit (maximum likelihood) values of the a and b parameters. (See PAPER CITATION for explanation.) 
 
 These a and b parameters are calculated from bitscores of homologs in species included in the prediction process. If the command line option --includeonly is used, this will be only the species specified by that option. By default, all provided bitscores are used.
+
+If not enough data for a gene was provided to generate a bitscore prediction (bitscores of homologs from at least three species are needed), the results will read "not\_enough\_data".
 
 __f) Run\_info__
 
