@@ -45,7 +45,7 @@ a) The probabilities of a homolog being undetected in each species;
 b) The expected bitscores of homologs in each species;
 
 c) The 99\% confidence interval around this bitscore in each species.
-
+s
 These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below). Additional information on these output files is below.
 
 
