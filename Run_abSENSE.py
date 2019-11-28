@@ -102,8 +102,8 @@ for i in range(0, len(speciesorder)):
         if speciesorder[i] in bitscores[0][j]:
             ordervec.append(j)
             found = True
-	    if speciesorder[i] in pred_specs:
-	        pred_spec_locs.append(i)
+            if speciesorder[i] in pred_specs:
+                pred_spec_locs.append(i)
     if found == False:
             sys.exit('One or more species names in distance file do not match species names in distance file! The first I encountered was' + speciesorder[i] + '. Quitting. \n')
 
@@ -253,9 +253,9 @@ pvaloutputfile.write('Gene')
 outputfileparams.write('Gene')
 for i in range(0, len(speciesorder)):
         mloutputfile.write('\t' + speciesorder[invordervec[i]])
-	lowboundoutputfile.write('\t' + speciesorder[invordervec[i]])
-	highboundoutputfile.write('\t' + speciesorder[invordervec[i]])
-	pvaloutputfile.write('\t' + speciesorder[invordervec[i]])
+        lowboundoutputfile.write('\t' + speciesorder[invordervec[i]])
+        highboundoutputfile.write('\t' + speciesorder[invordervec[i]])
+        pvaloutputfile.write('\t' + speciesorder[invordervec[i]])
 mloutputfile.write('\n')
 lowboundoutputfile.write('\n')
 highboundoutputfile.write('\n')
@@ -267,18 +267,18 @@ print 'Running!'
 
 for i in range(0, len(genelist)):
         # report current position and gene name
-	print 'gene', i, 'out of', str(len(genelist)), ':', genelist[i]
-	
-	# print current gene to output file
-	mloutputfile.write(genelist[i])
-	lowboundoutputfile.write(genelist[i])
-	highboundoutputfile.write(genelist[i])
-	outputfileparams.write(genelist[i])
-	pvaloutputfile.write(genelist[i])
+        print 'gene', i, 'out of', str(len(genelist)), ':', genelist[i]
+        
+        # print current gene to output file
+        mloutputfile.write(genelist[i])
+        lowboundoutputfile.write(genelist[i])
+        highboundoutputfile.write(genelist[i])
+        outputfileparams.write(genelist[i])
+        pvaloutputfile.write(genelist[i])
 
-	# make new arrays to put truncated (not using omitted species) scores, distances
-	genebitscores = []
-	truncdistances = []
+        # make new arrays to put truncated (not using omitted species) scores, distances
+        genebitscores = []
+        truncdistances = []
 
         # if gene length input file given, look for length of current gene
         # if not given, assume default value (specified above)
@@ -294,7 +294,7 @@ for i in range(0, len(genelist)):
         elif genelengthfilefound ==  False:
                 seqlen = float(defgenelen)
 
-	# put scores for current gene in bitscore file in right order
+        # put scores for current gene in bitscore file in right order
         orderedscores = []
         for k in range(0, len(ordervec)): # ordervec starts at 1 
                 orderedscores.append(bitscores[i+1][ordervec[k]]) ## # i + 1 because header skipped in gene list formation, so one behind now
@@ -312,23 +312,23 @@ for i in range(0, len(genelist)):
                                 genebitscores.append(float(orderedscores[k]))
                                 truncdistances.append(rawdistances[k])
         
-	if len(truncdistances) > 2: 
-		try: 
+        if len(truncdistances) > 2: 
+                try: 
                         (a, b), covar = curve_fit(func, truncdistances, genebitscores, bounds=((-np.inf, 0), (np.inf, np.inf)))
-		except RuntimeError:
+                except RuntimeError:
                         for j in range(0, len(rawdistances)):
-	                        mloutputfile.write('\t' + 'analysis_error')
-				highboundoutputfile.write('\t' + 'analysis_error')
-				lowboundoutputfile.write('\t' + 'analysis_error')
-				pvaloutputfile.write('\t' + 'analysis_error')
-			mloutputfile.write('\n')
-                	highboundoutputfile.write('\n')
-                	lowboundoutputfile.write('\n')
-                	outputfileparams.write('\t' + 'analysis_error' + '\t' + 'analysis_error' + '\n')
-                	pvaloutputfile.write('\n')
-			continue
+                                mloutputfile.write('\t' + 'analysis_error')
+                                highboundoutputfile.write('\t' + 'analysis_error')
+                                lowboundoutputfile.write('\t' + 'analysis_error')
+                                pvaloutputfile.write('\t' + 'analysis_error')
+                        mloutputfile.write('\n')
+                        highboundoutputfile.write('\n')
+                        lowboundoutputfile.write('\n')
+                        outputfileparams.write('\t' + 'analysis_error' + '\t' + 'analysis_error' + '\n')
+                        pvaloutputfile.write('\n')
+                        continue
                 parout = parameter_CI_find(a, b, covar) 
-		if parout != 'failed':
+                if parout != 'failed':
                         testavals, testbvals = parout
                         for j in range(0, len(rawdistances)):
                                 bitthresh = -1*math.log(ethresh/(seqlen*speciestotallengths[invordervec[j]]), 2)
@@ -363,7 +363,7 @@ for i in range(0, len(genelist)):
                                 mloutputfile.write('\t' + str(prediction))
                                 highboundoutputfile.write('\t' + 'analysis_error')
                                 lowboundoutputfile.write('\t' + 'analysis_error')
-				pvaloutputfile.write('\t' + 'analysis_error')
+                                pvaloutputfile.write('\t' + 'analysis_error')
                         mloutputfile.write('\n')
                         highboundoutputfile.write('\n')
                         outputfileparams.write('\t' + 'analysis_error' + '\t' + 'analysis_error' + '\n')
@@ -372,13 +372,13 @@ for i in range(0, len(genelist)):
         else:
                 for j in range(0, len(rawdistances)):
                         mloutputfile.write('\t' + 'not_enough_data')
-			highboundoutputfile.write('\t' + 'not_enough_data')
-			lowboundoutputfile.write('\t' + 'not_enough_data')
-			pvaloutputfile.write('\t' + 'not_enough_data')
+                        highboundoutputfile.write('\t' + 'not_enough_data')
+                        lowboundoutputfile.write('\t' + 'not_enough_data')
+                        pvaloutputfile.write('\t' + 'not_enough_data')
                 mloutputfile.write('\n')
-		highboundoutputfile.write('\n')
-		lowboundoutputfile.write('\n')
-		pvaloutputfile.write('\n')
+                highboundoutputfile.write('\n')
+                lowboundoutputfile.write('\n')
+                pvaloutputfile.write('\n')
                 outputfileparams.write('\t' + 'not_enough_data' + '\t' + 'not_enough_data' + '\n')
 mloutputfile.close()
 highboundoutputfile.close()

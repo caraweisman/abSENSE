@@ -97,8 +97,8 @@ for i in range(0, len(speciesorder)):
         if speciesorder[i] in bitscores[0][j]:
             ordervec.append(j)
             found = True
-	    if speciesorder[i] in pred_specs:
-	        pred_spec_locs.append(i)
+            if speciesorder[i] in pred_specs:
+                pred_spec_locs.append(i)
     if found == False:
             sys.exit('One or more species names in distance file do not match species names in distance file! The first I encountered was' + speciesorder[i] + '. Quitting. \n')
 
@@ -232,7 +232,7 @@ for j in range(0, len(bitscores)):
         if gene in bitscores[j][0]:
                 scores = bitscores[j][1:]
                 #orderedscores = [x for _,x in sorted(zip(rawdistances,scores))]
-        	# put scores for current gene in bitscore file in right order
+                # put scores for current gene in bitscore file in right order
                 orderedscores = []
                 for k in range(0, len(ordervec)): # ordervec starts at 1 
                         orderedscores.append(bitscores[j][ordervec[k]]) ## # i + 1 because header skipped in gene list formation, so one behind now
