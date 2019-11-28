@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import glob
 import sys
@@ -178,28 +179,32 @@ def PI_find(testavals, testbvals, currx):
         mean = np.mean(PIsamples)
         # compute std dev of sample
         std = np.std(PIsamples)
-
+        
         # empirically determine, from sampled scores, how many are below detectability threshold 
         undetcount = 0
         for i in range(0, len(PIsamples)):
                 if PIsamples[i] < bitthresh: 
                         undetcount = undetcount + 1
 
-        # compute fraction of sampled scores below threshold = P(undetected) = "p-value"
-        pval = float(undetcount)/float(len(PIsamples))
+        # compute fraction of sampled scores below threshold = P(undetected) = empriical "p-value"
+        emppval = float(undetcount)/float(len(PIsamples))
 
-        return mean - 3*std, mean + 3*std, pval
+        # calculate this analytically from std estimate
+        pval = stats.norm.cdf(bitthresh, mean, std)
+        
+        # calculate 99% CI 
+        (lowint, highint) = stats.norm.interval(0.99, mean, std)
 
-
-
+        return lowint, highint, pval
+        
 ###### Main execution ######
 
 # Nice terminal output formatting
-print '\n'
-print '\n'
-print '\n'
+print('\n')
+print('\n')
+print('\n')
 
-print 'Running! (May take a moment...)'
+print('Running! (May take a moment...)')
 
 # Ignore warning that sometimes happen as a result of stochastic sampling but that doesn't affect overall computation
 warnings.filterwarnings("ignore", message="invalid value encountered in sqrt")
@@ -280,7 +285,7 @@ try:
         (a, b), covar = curve_fit(func, preddistances, predbitscores)
         slope, intercept, r_value, p_value, std_err = stats.linregress(alldistances,logscores)
 except RuntimeError:
-        print 'Runtime Error'
+        print('Runtime Error')
 parout = parameter_CI_find(a, b, covar) 
 if parout != 'failed':
         testavals, testbvals = parout
@@ -289,16 +294,16 @@ if parout != 'failed':
                 lowprediction, highprediction, pval = PI_find(testavals, testbvals, smoothx[j])
                 highs.append(highprediction)
                 lows.append(lowprediction)
-        print '\n'
-        print '\n'
-        print '\n'
-        print 'Results:'
+        print('\n')
+        print('\n')
+        print('\n')
+        print('Results:')
 
-        print '\n'
-        print 'Best-fit a parameter from bitscores included in fit (black points): ', round(a,2)
-        print 'Best-fit b parameter from bitscores included in fit (black points): ', round(b,2)
-        print 'r squared from all bitscores (black points and orange points, if any):', round(r_value**2,2)
-        print '\n'
+        print('\n')
+        print('Best-fit a parameter from bitscores included in fit (black points):', str(round(a,2)))
+        print('Best-fit b parameter from bitscores included in fit (black points): ', round(b,2))
+        print('r squared from all bitscores (black points and orange points, if any):', round(r_value**2,2))
+        print('\n')
         for j in range(0, len(tocalcdists)):
                 for k in range(1, len(speciesdblengths)):
                         # now use species-specific db length
@@ -306,12 +311,14 @@ if parout != 'failed':
                                 dblen = float(speciesdblengths[k][1])
                                 bitthresh = -1*math.log(ethresh/(dblen*seqlen), 2)
                 lowprediction, highprediction, pval = PI_find(testavals, testbvals, tocalcdists[j])
-                print tocalcspecs[j], ':'
-                print 'Maximum likelihood bitscore prediction: ', str(round(func(tocalcdists[j], a,b),2))
-                print '99th percentile (high) prediction: ', str(round(highprediction, 2))
-                print '1st percentile (low) prediction: ', str(round(lowprediction, 2))
-                print 'Probability of homolog being undetected: ', pval
-                print '\n'
+                print(tocalcspecs[j], ':')
+                print('Probability of homolog being undetected: ', pval)
+                print('Maximum likelihood bitscore prediction: ', str(round(func(tocalcdists[j], a,b),2)))
+                print('99 percent confidence interval: ',  str(round(lowprediction, 2)), '-',  str(round(highprediction, 2)))
+                #print('99th percentile (high) prediction: ', str(round(highprediction, 2)))
+                #print('1st percentile (low) prediction: ', str(round(lowprediction, 2)))
+                #print('Probability of homolog being undetected: ', pval)
+                print('\n')
 
 
 
@@ -319,6 +326,7 @@ startheight = 0.88
 
 rawdistancesbydist = sorted(rawdistances)
 speciesorderbydist = [x for _,x in sorted(zip(rawdistances,speciesorder))]
+plt.figure(figsize=(11.5, 6.0))
 
 labels = speciesorderbydist
 afont = {'fontname':'Arial'}
@@ -329,6 +337,7 @@ plt.plot(smoothx, highs, c='black')
 plt.plot(smoothx, lows, c='black')
 plt.fill_between(smoothx, highs, lows, facecolor='blue', alpha=0.2, label='99% confidence interval')
 plt.ylabel('Bitscore', fontsize=13, labelpad=10, **afont)
+plt.xlabel('Evolutionary distance from focal species', fontsize=13, labelpad=10, **afont)
 plt.gca().spines['right'].set_visible(False)
 plt.gca().spines['top'].set_visible(False)
 plt.gca().tick_params(axis='x', width=2, length=7, direction='inout')
