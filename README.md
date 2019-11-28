@@ -2,7 +2,7 @@
 
 ## __INTRODUCTION__ 
 
-Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a homology search (using BLAST or a similar method) in a given species if the gene is evolving normally. 
+Welcome! This is the public Git repository for abSENSE, a method that calculates the probability that a homolog of a given gene would fail to be detected by a homology search (using BLAST or a similar method) in a given species, even if the homolog were present and evolving normally. 
 
 The result of this calculation informs how one interprets the result of a homology search failing to find homologs of a gene in some species. One possibility to explain such a result is that the gene is _actually absent_ from the genome in that species: a biological, and potentially interesting (e.g. if due to a gene loss or the birth of a new gene), result. 
 
