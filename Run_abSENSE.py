@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import glob
 import sys
@@ -105,7 +106,7 @@ for i in range(0, len(speciesorder)):
             if speciesorder[i] in pred_specs:
                 pred_spec_locs.append(i)
     if found == False:
-            sys.exit('One or more species names in distance file do not match species names in distance file! The first I encountered was' + speciesorder[i] + '. Quitting. \n')
+            sys.exit('One or more species names in header of bitscore file do not match species names in header of distance file! The first I encountered was ' + speciesorder[i] + '. Quitting. \n')
 
 invordervec = [] # first index is location of first species in file in speciesorder; and so on
 for i in range(0, len(bitscores[0])):
@@ -190,11 +191,17 @@ def PI_find(testavals, testbvals, currx):
                 if PIsamples[i] < bitthresh: 
                         undetcount = undetcount + 1
 
-        # compute fraction of sampled scores below threshold = P(undetected) = "p-value"
-        pval = float(undetcount)/float(len(PIsamples))
+        # compute fraction of sampled scores below threshold = P(undetected) = empriical "p-value"
+        emppval = float(undetcount)/float(len(PIsamples))
 
-        return mean - 3*std, mean + 3*std, pval
+        # calculate this analytically from std estimate
+        pval = stats.norm.cdf(bitthresh, mean, std)
+        
+        # calculate 99% CI 
+        (lowint, highint) = stats.norm.interval(0.99, mean, std)
 
+        return lowint, highint, pval
+        
 ###### Output preparation ######
 
 # make directory named for control file into which all output files will be put
@@ -263,11 +270,11 @@ pvaloutputfile.write('\n')
 outputfileparams.write('\t' + 'a' + '\t' + 'b' + '\n')
 
 
-print 'Running!'
+print('Running!')
 
 for i in range(0, len(genelist)):
         # report current position and gene name
-        print 'gene', i, 'out of', str(len(genelist)), ':', genelist[i]
+        print('gene', i, 'out of', str(len(genelist)), ':', genelist[i])
         
         # print current gene to output file
         mloutputfile.write(genelist[i])

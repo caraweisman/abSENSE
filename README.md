@@ -12,9 +12,17 @@ By calculating the probability that your homology search would fail to detect a 
 
 The method is explained in further detail in the paper (citation). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
+In this repo, you will find:
+
+__a)__ Code that can perform this analysis using the required input data (see below)
+
+__b)__ All input data used in the fungal and insect lineages discussed in (PAPER CITATION) that can be used as input to the analysis code. 
+
 ## __GUI WEBSITE AVAILABLE FOR SIMPLE ANALYSES__
 
 We have a GUI website that can perform basic single-gene analyses that don't require the advanced command line options available here (see below). If this is your case, you may find it easier to use than downloading and running this code on the command line.
+
+The website is pre-loaded with the input data required to perform these analyses for all of the fungal and insect genes analyzed in (PAPER CITATION). It can also perform analyses on user-provided input data. 
 
 The website is available at: LINK
 
@@ -28,15 +36,15 @@ i) A file containing the bitscores of homologs of each gene to be analyzed in at
 
 ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. The distance between the focal species and itself should be 0. (If you don't already have such distances, a description of how to calculate them relatively painlessly can be found in PAPER CITATION.)
 
-Examples of both of these files can be found for the fungal and insect lineages analyzed in (paper citation). The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. They exemplify the formatting required for abSENSE to run (explained in more detail below).
+Examples of both of these files for a subset of genes from S. cerevisiae and their orthologs 11 other fungal species (the same species analyzed in CITATION) can be found in the folder Quickstart\_Examples: the bitscore file is Fungi\_Example\_Bitscores, and the distance file is Fungi\_Distances. They exemplify the formatting required for abSENSE to run (explained in more detail below).
 
 To run abSENSE on a given bitscore and distance file, type:
 
-__python abSENSE_run.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE)__
+__python Run_abSENSE.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE)__
     
-For example, to run abSENSE on the example fungal data (containing all S. cerevisiae genes in the current RefSeq annotation and their orthologs in 11 other fungal species), type: 
+For example, to run abSENSE on the example fungal genes, type: 
 
-__python abSENSE_run.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores__
+__python Run_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scorefile Quickstart\_Examples/Fungi\_Example\_Bitscores__
 
 For each gene in the input bitscore file, the following will be computed:
 
@@ -45,10 +53,8 @@ a) The probabilities of a homolog being undetected in each species;
 b) The expected bitscores of homologs in each species;
 
 c) The 99\% confidence interval around this bitscore in each species.
-s
+
 These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below). Additional information on these output files is below.
-
-
 
 
 ### Quickstart: visualization
@@ -58,11 +64,11 @@ It is run in the same way, except that it also requires specifying which single 
 
 To run abSENSE on gene GENEID contained in a given bitscore with a given distance file, type:
 
-__python abSENSE_plot.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE) --gene GENEID__
+__python Plot_abSENSE.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF SCORE FILE) --gene GENEID__
 
 For example, to analyze the S. cerevisiae gene Uli1, listed in the bitscore file unde its RefSeq ID (NP_116682.3), type:
 
-__python abSENSE_plot.py --distfile Fungi_Data/Fungi_Distances --scorefile Fungi_Data/Fungi_Bitscores --gene NP_116682.3__
+__python Plot_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scorefile Quickstart\_Examples/Fungi\_Example\_Bitscores__ --gene NP_116682.3__
 
 The same results as above will be computed, but now they will be output to the terminal, and then the visualiation will be shown.
 
@@ -71,7 +77,7 @@ The same results as above will be computed, but now they will be output to the t
 
 You can specify advanced options with the additional command line options. You can view them all by typing
 
-__python abSENSE_run.py --help__
+__python Run_abSENSE.py --help__
 
 They are:
 
@@ -98,10 +104,10 @@ __--includeonly__: Allows you to restrict the species whose bitscores are used i
 
 For example, to run an analysis on all S. cerevisiae proteins in the selected fungal species in which the lengths of each S. cerevisiae protein and the sizes of each species' search database (their annotated proteomes as indicated in the supplement of PAPER CITATION) are specified:
 
-__python abSENSE_run.py --distfile Fungi\_Data/Fungi\_Distances --scorefile Fungi\_Data/Fungi\_Bitscores --genelenfile Fungi_Data/S\_cer\_Protein\_Lengths --dblenfile Fungi\_Data/Fungi\_Database\_Lengths__
+__python Run_abSENSE.py --distfile Fungi\_Data/Fungi\_Distances --scorefile Fungi\_Data/Fungi\_Bitscores --genelenfile Fungi_Data/S\_cer\_Protein\_Lengths --dblenfile Fungi\_Data/Fungi\_Database\_Lengths__
 
 
-The visualization script __abSENSE\_plot.py__ takes all of the same options, with the exception of again requiring that the gene to be analyzed is specified by the --gene option, and also that the --genelenfile option is instead --genelen, after which should be entered an integer corresponding to the length of the gene. (With a single gene, it's hardly worth requiring a whole file: just give the number.)
+The visualization script __Plot_abSENSE.py__ takes all of the same options, with the exception of again requiring that the gene to be analyzed is specified by the --gene option, and also that the --genelenfile option is instead --genelen, after which should be entered an integer corresponding to the length of the gene. (With a single gene, it's hardly worth requiring a whole file: just give the number.)
 
 
 ## __3: OUTPUT FILES__
@@ -194,7 +200,14 @@ just run the command
 __esl-seqstat (FASTA FILE)__
 on each database; this will report the total length in aa of each database file. You can then put these into a tab-delimited file manually.
 
-## __5: QUESTIONS?__
+## __5: DATA FOR FUNGAL AND INSECT GENES IN (PAPER CITATION)__
+
+Also in this folder are all input data required to perform abSENSE analyses on the fungal and insect lineages analyzed in (paper citation). The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. 
+
+As discussed in (CITATION), the bitscore files contain the bitscores of orthologs of all S. cerevisiae genes in the current RefSeq annotation in 11 other fungal species. The insect bitscore files contain the bitscores of orthologs of all D. melanogaster genes in the current RefSeq annotation in 21 other fungal species. 
+
+
+## __6: QUESTIONS?__
 
 If you have questions, concerns, or suspect a bug, please contact me at weisman@g.harvard.edu. 
 
