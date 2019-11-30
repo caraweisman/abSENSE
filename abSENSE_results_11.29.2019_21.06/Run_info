@@ -1,7 +1,0 @@
-abSENSE analysis run on 11.29.2019_21.06
-Input bitscore file: Quickstart_Examples/Fungi_Example_Bitscores
-Input distance file: Quickstart_Examples/Fungi_Distances
-Gene length (for all genes): 400.0 (default)
-Database length (for all species): 8000000.0 (default)
-Species used in fit: All (default)
-E-value threshold: 0.001 (default)
