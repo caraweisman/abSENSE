@@ -48,15 +48,16 @@ distancefilecheck = glob.glob(args.distfile)
 if len(distancefilecheck) == 0:
         sys.exit('Distance file with that name not found! Is it in the current directory? If not, specify directory information. Quitting. \n')
 else:
-        distancefile = np.genfromtxt(args.distfile, dtype=str, delimiter='\t')
+        distancefile = np.transpose(np.genfromtxt(args.distfile, dtype=str, delimiter='\t'))
 
 scorefilecheck = glob.glob(args.scorefile)
 if len(scorefilecheck) == 0:
         sys.exit('Bitscore file with that name not found! Is it in the current directory? If not, specify directory information. Quitting. \n')
 else:
         bitscores = np.genfromtxt(args.scorefile, dtype=str, delimiter='\t')
-        
-        
+
+print(distancefile)
+
 speciesorder = distancefile[0]
 rawdistances = distancefile[1].astype(float)
 

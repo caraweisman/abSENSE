@@ -171,9 +171,9 @@ Two examples are provided: Fungi\_Data/Fungi_\Bitscores and Insect_\Data/Insect\
 
 __b) The distance file__
 
-For an analysis with N species (including the focal species), the distance file should be a tab-delimited file of N columns by 2 rows.
-Entries in the first row should contain the name of each species in your analysis. These names should match those in the bitscore file (above) exactly.
-Entries in the second row should contain the evolutionary distance between each species in the indicated column and the focal species. (The distance between the focal species and itself should always be 0.)
+For an analysis with N species (including the focal species), the distance file should be a tab-delimited file of 2 columns by N rows.
+Entries in the first column should contain the name of each species in your analysis. These names should match those in the bitscore file (above) exactly.
+Entries in the second column should contain the evolutionary distance between each species in the indicated column and the focal species. (The distance between the focal species and itself should always be 0.)
 Two examples are provided: Fungi\_Data/Fungi\_Distances and Insect\_Data/Insect\_Distances.
 
 Optional files:

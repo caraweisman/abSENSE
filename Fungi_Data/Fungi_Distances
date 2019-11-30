@@ -1,3 +1,12 @@
-S_cer	S_par	S_mik	S_kud	S_bay	S_castellii	K_waltii	A_gossyppi	K_lactis	A_nidulans	S_pombe	Y_lipolytica
-0	0.051	0.088	0.104	0.108	0.363	0.494	0.518	0.557	0.903	0.922	0.954
-
+S_cer	0
+S_par	0.051
+S_mik	0.088
+S_kud	0.104
+S_bay	0.108
+S_castellii	0.363
+K_waltii	0.494
+A_gossyppi	0.518
+K_lactis	0.557
+A_nidulans	0.903
+S_pombe	0.922
+Y_lipolytica	0.954
