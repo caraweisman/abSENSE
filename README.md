@@ -68,7 +68,7 @@ __python Plot_abSENSE.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF
 
 For example, to analyze the S. cerevisiae gene Uli1, listed in the bitscore file unde its RefSeq ID (NP_116682.3), type:
 
-__python Plot_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scorefile Quickstart\_Examples/Fungi\_Example\_Bitscores__ --gene NP\_116682.3__
+__python Plot_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scorefile Quickstart\_Examples/Fungi\_Example\_Bitscores --gene NP\_116682.3__
 
 The same results as above will be computed, but now they will be output to the terminal, and then the visualiation will be shown.
 
