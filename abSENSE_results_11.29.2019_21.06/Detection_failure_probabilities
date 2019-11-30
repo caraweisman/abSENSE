@@ -1,0 +1,11 @@
+# This file contains the probability of a homolog being undetected at the specified significance threshold (see run info file) in each tested gene in each species
+Gene	S_cer	S_par	S_mik	S_bay	S_kud	S_castellii	K_waltii	K_lactis	A_gossyppi	Y_lipolytica	A_nidulans	S_pombe
+NP_010181.2	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected
+NP_009362.1	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected
+NP_014555.1	Detected	Detected	Detected	Detected	Detected	0.0	Detected	Detected	0.0	0.0	0.0	Detected
+NP_116682.3	Detected	Detected	Detected	0.0	Detected	1.0	1.0	1.0	1.0	1.0	1.0	1.0
+NP_011284.1	Detected	Detected	Detected	Detected	Detected	0.32	0.96	1.0	0.99	1.0	1.0	1.0
+NP_011878.1	Detected	Detected	Detected	Detected	Detected	0.0	0.0	0.0	0.0	0.37	0.22	0.27
+NP_013320.1	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	Detected	1.0	1.0	1.0
+NP_014160.2	Detected	Detected	Detected	Detected	Detected	Detected	0.0	0.0	Detected	Detected	Detected	0.0
+NP_014890.1	Detected	Detected	Detected	Detected	Detected	Detected	0.53	0.78	0.63	1.0	1.0	1.0

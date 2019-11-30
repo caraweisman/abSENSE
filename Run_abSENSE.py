@@ -14,6 +14,8 @@ import os
 import warnings
 import argparse
 from datetime import datetime
+from scipy import stats
+
 
 ###### Define user inputs #####
 
@@ -41,7 +43,7 @@ distancefilecheck = glob.glob(args.distfile)
 if len(distancefilecheck) == 0:
         sys.exit('Distance file with that name not found! Is it in the current directory? If not, specify directory information. Quitting. \n')
 else:
-        distancefile = np.genfromtxt(args.distfile, dtype=str, delimiter='\t')
+        distancefile = np.transpose(np.genfromtxt(args.distfile, dtype=str, delimiter='\t'))
 
 scorefilecheck = glob.glob(args.scorefile)
 if len(scorefilecheck) == 0:

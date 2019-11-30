@@ -56,8 +56,6 @@ if len(scorefilecheck) == 0:
 else:
         bitscores = np.genfromtxt(args.scorefile, dtype=str, delimiter='\t')
 
-print(distancefile)
-
 speciesorder = distancefile[0]
 rawdistances = distancefile[1].astype(float)
 

@@ -48,13 +48,13 @@ __python Run_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scoref
 
 For each gene in the input bitscore file, the following will be computed:
 
-a) The probabilities of a homolog being undetected in each species;
+a) The probabilities of a homolog being undetected in each species (in the file Detection\_Failure\_Probabilities);
 
-b) The expected bitscores of homologs in each species;
+b) The expected bitscores of homologs in each species (in the file Predicted\_bitscores);
 
-c) The 99\% confidence interval around this bitscore in each species.
+c) The 99\% confidence interval around this bitscore in each species (low and high bounds listed in separate files: Bitscore\_99PI\_lowerbound_predictions and Bitscore\_99PI\_higherbound\_predictions)
 
-These results will be output to a set of tab-delimited files in a separate directory (by default named with the start time of the analysis; you can specify the name with a command line option, see below). Additional information on these output files is below.
+These results will be output to a set of tab-delimited files in a separate directory, by default named with the start time of the analysis. (You can specify the name with a command line option, see below). Additional information on output files is below.
 
 
 ### Quickstart: visualization
@@ -68,7 +68,7 @@ __python Plot_abSENSE.py --distfile (NAME OF DISTANCE FILE) --scorefile (NAME OF
 
 For example, to analyze the S. cerevisiae gene Uli1, listed in the bitscore file unde its RefSeq ID (NP_116682.3), type:
 
-__python Plot_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scorefile Quickstart\_Examples/Fungi\_Example\_Bitscores__ --gene NP_116682.3__
+__python Plot_abSENSE.py --distfile Quickstart\_Examples/Fungi_Distances --scorefile Quickstart\_Examples/Fungi\_Example\_Bitscores__ --gene NP\_116682.3__
 
 The same results as above will be computed, but now they will be output to the terminal, and then the visualiation will be shown.
 
