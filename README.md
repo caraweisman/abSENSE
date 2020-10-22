@@ -200,6 +200,8 @@ just run the command
 __esl-seqstat (FASTA FILE)__
 on each database; this will report the total length in aa of each database file. You can then put these into a tab-delimited file manually.
 
+If your BLAST search is done on a nucleotide genome of the outgroup species via TBLASTN, the database length that you should use for each genome is 2N, where N is the genome length in nucleotides. (For a genome of N nucleotides, there are ~N/3 codons in it, which can be read in each of 6 possible reading frames, for a total of 6N/3 = 2N amino acids.) 
+
 ## __5: DATA FOR FUNGAL AND INSECT GENES IN (PAPER CITATION)__
 
 Also in this folder are all input data required to perform abSENSE analyses on the fungal and insect lineages analyzed in (paper citation). The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. 
