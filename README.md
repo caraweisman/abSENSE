@@ -12,7 +12,7 @@ By calculating the probability that your homology search would fail to detect a 
 
 **The method is explained in complete detail in the paper in which it's introduced. This is the paper that is referred to in the rest of this README:**
 
-**Weisman, Caroline M., Andrew W. Murray, and Sean R. Eddy. "Many but not all lineage-specific genes can be explained by homology detection failure." PLOS Biology (2020). https://doi.org/10.1371/journal.pbio.3000862**
+**Weisman CM, Murray AW, Eddy SR (2020) Many, but not all, lineage-specific genes can be explained by homology detection failure. PLoS Biol 18(11): e3000862. https://doi.org/10.1371/journal.pbio.3000862**
 
 There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
