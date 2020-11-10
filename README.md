@@ -10,21 +10,25 @@ A second explanation, often ignored, is that the homolog _is_ present in the gen
 
 By calculating the probability that your homology search would fail to detect a homolog _even if one were present_ and _even if it were evolving normally_ (e.g. no rate accelerations on a specific branch, potentially suggestive of biologically interesting changes), abSENSE informs the interpretation of a negative homology search result. If abSENSE finds that there is a high probability of a homolog being undetected even if present, you may not be as inclined to invoke a biological explanation for the result: the null model of a failure of the homology search is sufficient to explain what you observe.
 
-The method is explained in further detail in the paper (https://www.biorxiv.org/content/10.1101/2020.02.27.968420v1). There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
+The method is explained in further detail in the paper: 
+
+Weisman, Caroline M., Andrew W. Murray, and Sean R. Eddy. "Many but not all lineage-specific genes can be explained by homology detection failure." PLOS Biology (2020). https://doi.org/10.1371/journal.pbio.3000862
+
+There, it is applied to the specific case of lineage-specific genes, for which homologs appear absent in all species outside of a narrow lineage. The method itself is applicable to any case in which a homolog appears absent (e.g. a single species missing a homolog that one might interpret as a gene loss), and likewise, this code is applicable to all such cases. 
 
 In this repo, you will find:
 
 __a)__ Code that can perform this analysis using the required input data (see below)
 
-__b)__ All input data used in the fungal and insect lineages discussed in (PAPER CITATION) that can be used as input to the analysis code. 
+__b)__ All input data used in the fungal and insect lineages discussed in Weisman et al 2020 that can be used as input to the analysis code. 
 
 ## __GUI WEBSITE AVAILABLE FOR SIMPLE ANALYSES__
 
 We have a GUI website that can perform basic single-gene analyses that don't require the advanced command line options available here (see below). If this is your case, you may find it easier to use than downloading and running this code on the command line.
 
-The website is pre-loaded with the input data required to perform these analyses for all of the fungal and insect genes analyzed in (PAPER CITATION). It can also perform analyses on user-provided input data. 
+The website is pre-loaded with the input data required to perform these analyses for all of the fungal and insect genes analyzed in Weisman et al 2020. It can also perform analyses on user-provided input data. 
 
-The website is available at: LINK
+The website is available at: http://eddylab.org/abSENSE/
 
 ## __1. RUNNING abSENSE: THE BASICS__
 
@@ -34,9 +38,9 @@ The main analysis script, __Run\_abSENSE.py__, calculates the probabilities of h
 
 i) A file containing the bitscores of homologs of each gene to be analyzed in at least three of the species (including the focal species itself, so two others). 
 
-ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. The distance between the focal species and itself should be 0. (If you don't already have such distances, a description of how to calculate them relatively painlessly can be found in PAPER CITATION.)
+ii) A file containing the N evolutionary distances, in substitutions/site, between the focal species and each other species. The distance between the focal species and itself should be 0. (If you don't already have such distances, a description of how to calculate them relatively painlessly can be found in Weisman et al 2020).
 
-Examples of both of these files for a subset of genes from S. cerevisiae and their orthologs 11 other fungal species (the same species analyzed in CITATION) can be found in the folder Quickstart\_Examples: the bitscore file is Fungi\_Example\_Bitscores, and the distance file is Fungi\_Distances. They exemplify the formatting required for abSENSE to run (explained in more detail below).
+Examples of both of these files for a subset of genes from S. cerevisiae and their orthologs 11 other fungal species (the same species analyzed in Weisman et al 2020) can be found in the folder Quickstart\_Examples: the bitscore file is Fungi\_Example\_Bitscores, and the distance file is Fungi\_Distances. They exemplify the formatting required for abSENSE to run (explained in more detail below).
 
 To run abSENSE on a given bitscore and distance file, type:
 
@@ -59,7 +63,7 @@ These results will be output to a set of tab-delimited files in a separate direc
 
 ### Quickstart: visualization
 
-A supplemental visualization script, __Plot_abSENSE.py__, performs the same analysis as above, but for one gene at a time, and also produces a visualization of the results (see PAPER CITATION).
+A supplemental visualization script, __Plot_abSENSE.py__, performs the same analysis as above, but for one gene at a time, and also produces a visualization of the results (see Weisman et al 2020). 
 It is run in the same way, except that it also requires specifying which single gene in the bitscore input file you wish to analyze.
 
 To run abSENSE on gene GENEID contained in a given bitscore with a given distance file, type:
@@ -99,10 +103,10 @@ Examples containing the lengths of all S. cerevisiae and D. melanogaster genes c
 
 __--predall__: Default is False. When True, Causes abSENSE to calculate the probability of homologs being undetected, the expected bitscores, and 99\% confidence intervals not only in species in which homologs were actually undetected, but also for species in which homologs have been found. This is obviously not the main use case, and is especially uninformative when those homologs and their bitscores have been used in the prediction itself (see below). May potentially be useful to see if a homolog in one species, although detected, seems to be behaving anomalously compared to those in other species (eg due to rate acceleration). 
 
-__--includeonly__: Allows you to restrict the species whose bitscores are used in predicting bitscores in other species. Mainly useful to do control-type analyses, such as Figure 5 in (PAPER CITATION), to show that predictions made from only a subset of the data are nonetheless reliable. If not specified, abSENSE uses all available bitscores in the prediction. 
+__--includeonly__: Allows you to restrict the species whose bitscores are used in predicting bitscores in other species. Mainly useful to do control-type analyses, such as Figure 5 in Weisman et al 2020, to show that predictions made from only a subset of the data are nonetheless reliable. If not specified, abSENSE uses all available bitscores in the prediction. 
 
 
-For example, to run an analysis on all S. cerevisiae proteins in the selected fungal species in which the lengths of each S. cerevisiae protein and the sizes of each species' search database (their annotated proteomes as indicated in the supplement of PAPER CITATION) are specified:
+For example, to run an analysis on all S. cerevisiae proteins in the selected fungal species in which the lengths of each S. cerevisiae protein and the sizes of each species' search database (their annotated proteomes as indicated in the supplement of Weisman et al 2020) are specified:
 
 __python Run_abSENSE.py --distfile Fungi\_Data/Fungi\_Distances --scorefile Fungi\_Data/Fungi\_Bitscores --genelenfile Fungi_Data/S\_cer\_Protein\_Lengths --dblenfile Fungi\_Data/Fungi\_Database\_Lengths__
 
@@ -148,7 +152,7 @@ If not enough data for a gene was provided to generate a bitscore prediction (bi
 
 __e) Parameter\_values__
 
-For each gene in the analysis, this contains the best-fit (maximum likelihood) values of the a and b parameters. (See PAPER CITATION for explanation.) 
+For each gene in the analysis, this contains the best-fit (maximum likelihood) values of the a and b parameters. (See Weisman et al 2020 for full explanation.) 
 
 These a and b parameters are calculated from bitscores of homologs in species included in the prediction process. If the command line option --includeonly is used, this will be only the species specified by that option. By default, all provided bitscores are used.
 
@@ -166,7 +170,7 @@ __a) The bitscore file__
 
 For an analysis of M genes in N species (including the focal species), the bitscore file should be a tab-delimited file of N+1 columns by M+1 rows.
 The first row should begin with a blank entry, and should be followed by N entries containing the names of the N species in your analysis. These names should match those in the distance file (below) exactly.
-The remaining M rows should each begin with the name/identifier of the gene from the focal species to be analyzed, followed by the bitscore of that gene against its homolog in the species indicated at the top of the given column. For species in which homologs are undetected, this value should be __0__. For species in which a homolog is detected, but the orthology is unclear and so you wish to exclude it from being used in the fit (see PAPER CITATION), this value should be __'N/A'__.
+The remaining M rows should each begin with the name/identifier of the gene from the focal species to be analyzed, followed by the bitscore of that gene against its homolog in the species indicated at the top of the given column. For species in which homologs are undetected, this value should be __0__. For species in which a homolog is detected, but the orthology is unclear and so you wish to exclude it from being used in the fit (see Weisman et al 2020), this value should be __'N/A'__.
 Two examples are provided: Fungi\_Data/Fungi_\Bitscores and Insect_\Data/Insect\_Bitscores.
 
 __b) The distance file__
@@ -202,9 +206,9 @@ on each database; this will report the total length in aa of each database file.
 
 If your BLAST search is done on a nucleotide genome of the outgroup species via TBLASTN, the database length that you should use for each genome is 2N, where N is the genome length in nucleotides. (For a genome of N nucleotides, there are ~N/3 codons in it, which can be read in each of 6 possible reading frames, for a total of 6N/3 = 2N amino acids.) 
 
-## __5: DATA FOR FUNGAL AND INSECT GENES IN (PAPER CITATION)__
+## __5: DATA FOR FUNGAL AND INSECT GENES IN Weisman et al 2020
 
-Also in this folder are all input data required to perform abSENSE analyses on the fungal and insect lineages analyzed in (paper citation). The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. 
+Also in this folder are all input data required to perform abSENSE analyses on the fungal and insect lineages analyzed in Weisman et al 2020. The fungal files are Fungi_Data/Fungi_Bitscores and Fungi_Data/Fungi_Distances; the insect files are Insect_Data/Insect_Bitscores and Insect_Data/Insect_Distances. 
 
 As discussed in (CITATION), the bitscore files contain the bitscores of orthologs of all S. cerevisiae genes in the current RefSeq annotation in 11 other fungal species. The insect bitscore files contain the bitscores of orthologs of all D. melanogaster genes in the current RefSeq annotation in 21 other fungal species. 
 
