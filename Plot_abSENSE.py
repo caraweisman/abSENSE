@@ -19,6 +19,8 @@ from dill.source import getsource
 from scipy import stats
 import argparse
 from datetime import datetime
+from matplotlib.patches import Patch
+
 
 
 
@@ -145,7 +147,7 @@ def parameter_CI_find(mla, mlb, covar):
 
         if True not in np.isinf(covar):
         
-                for i in range(0, 20): # 200
+                for i in range(0, 100): 
                         a = np.random.multivariate_normal([mla, mlb], covar)[0]
                         b = np.random.multivariate_normal([mla, mlb], covar)[1]
                         testavals.append(a)
@@ -169,7 +171,7 @@ def PI_find(testavals, testbvals, currx):
                 estnoise = np.sqrt(testavals[i]*(1-math.exp(-1*testbvals[i]*currx))*(math.exp(-1*testbvals[i]*currx)))
                 if estnoise > 0:
                         parpairvals = []
-                        for j in range(0, 20): # 200
+                        for j in range(0, 100): # 200
                                 PIsamples.append(detval + np.random.normal(0, estnoise))
                                 parpairvals.append(detval + np.random.normal(0, estnoise))
                 else:
@@ -303,6 +305,8 @@ if parout != 'failed':
         print('Best-fit b parameter from bitscores included in fit (black points): ', round(b,2))
         print('r squared from all bitscores (black points and orange points, if any):', round(r_value**2,2))
         print('\n')
+        print('Species with no homologs detected:')
+        print('\n')
         for j in range(0, len(tocalcdists)):
                 for k in range(1, len(speciesdblengths)):
                         # now use species-specific db length
@@ -311,7 +315,7 @@ if parout != 'failed':
                                 bitthresh = -1*math.log(ethresh/(dblen*seqlen), 2)
                 lowprediction, highprediction, pval = PI_find(testavals, testbvals, tocalcdists[j])
                 print(tocalcspecs[j], ':')
-                print('Probability of homolog being undetected: ', pval)
+                print('Probability of homolog being undetected: ', round(pval, 2))
                 print('Maximum likelihood bitscore prediction: ', str(round(func(tocalcdists[j], a,b),2)))
                 print('99 percent confidence interval: ',  str(round(lowprediction, 2)), '-',  str(round(highprediction, 2)))
                 #print('99th percentile (high) prediction: ', str(round(highprediction, 2)))
@@ -345,7 +349,7 @@ totrange = max(smoothx) - min(smoothx)
 inc = float(totrange)/100
 for i in range(0, len(absentspecs)):
         if i == 0:
-                plt.axvspan(absentdists[i] - inc, absentdists[i] + inc, facecolor='#fc8123', alpha=0.3, label='No homolog detected in species', capstyle='round')
+                plt.axvspan(absentdists[i] - inc, absentdists[i] + inc, facecolor='#fc8123', alpha=0.3, label='No homolog detected!', capstyle='round')
                 plt.gca().get_xticklabels()[labels.index(absentspecs[i])].set_color('#fc8123')
                 plt.gca().get_xticklabels()[labels.index(absentspecs[i])].set_weight('bold')
                 
@@ -364,11 +368,25 @@ plt.axhline(y=globalbitthresh, linestyle='dashed', c='black', label='Detectabili
 plt.xlim([-inc, max(rawdistances)+inc])
 plt.ylim([0, max(predictions)+max(predictions)/10])
 handles, labels = plt.gca().get_legend_handles_labels()
-if len(absentspecs) > 0: 
+if len(absentspecs) > 0:
         order = [3, 0, 4, 1, 2]
 else:
         order = [2,0, 3,1]
-plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], fontsize=9)
+addedambighandle = Patch(facecolor='#a3a29b',alpha=0.3)
+addedambiglabel =  'Homolog detected, but orthology ambiguous'
+
+handlelist = [handles[idx] for idx in order]
+labelist = [labels[idx] for idx in order]
+
+finalhandle = handlelist[:-1] + [addedambighandle] + [handlelist[-1]]
+finallabel = labelist[:-1] + [addedambiglabel] + [labelist[-1]]
+
+
+#handlelist = [handles[idx] for idx in order].insert(len([handles[idx] for idx in order])-2, addedambighandle)
+#labelist = [labels[idx] for idx in order].insert(len([labels[idx] for idx in order])-2, addedambiglabel)
+plt.legend(finalhandle, finallabel, fontsize=9)
+
+#plt.legend([handles[idx] for idx in order] ,[labels[idx] for idx in order],  fontsize=9)
 plt.tight_layout()
 plt.show()
 

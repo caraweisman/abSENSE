@@ -289,6 +289,9 @@ for i in range(0, len(genelist)):
         genebitscores = []
         truncdistances = []
 
+        # make new arrays to indicate which species/distances are ambiguous orthology but have a homolog; don't predict these later
+        ambigdists =  [] 
+        
         # if gene length input file given, look for length of current gene
         # if not given, assume default value (specified above)
         lengthfound = False
@@ -316,10 +319,14 @@ for i in range(0, len(genelist)):
                         if isfloat(orderedscores[k]) == True and orderedscores[k] != '0' and k in pred_spec_locs:
                                 genebitscores.append(float(orderedscores[k]))
                                 truncdistances.append(rawdistances[k])
+                        elif orderedscores[k] == 'N/A':
+                                ambigdists.append(rawdistances[k])
                 else:
                         if isfloat(orderedscores[k]) == True and orderedscores[k] != '0':
                                 genebitscores.append(float(orderedscores[k]))
                                 truncdistances.append(rawdistances[k])
+                        elif orderedscores[k] == 'N/A':
+                                ambigdists.append(rawdistances[k])
         
         if len(truncdistances) > 2: 
                 try: 
@@ -343,23 +350,35 @@ for i in range(0, len(genelist)):
                                 bitthresh = -1*math.log(ethresh/(seqlen*speciestotallengths[invordervec[j]]), 2)
                                 prediction = round(func(rawdistances[invordervec[j]], a,b),2)
                                 lowprediction, highprediction, pval = PI_find(testavals, testbvals, rawdistances[invordervec[j]])
-                                if rawdistances[invordervec[j]] not in truncdistances:
+                                if rawdistances[invordervec[j]] not in truncdistances and rawdistances[invordervec[j]] not in ambigdists:
                                         mloutputfile.write('\t' + str(prediction))
                                         highboundoutputfile.write('\t' + str(round(highprediction,2)))
                                         lowboundoutputfile.write('\t' + str(round(lowprediction,2)))
                                         pvaloutputfile.write('\t' + str(round(pval,2)))
-                                elif rawdistances[invordervec[j]] in truncdistances:
+                                elif rawdistances[invordervec[j]] in truncdistances: #  could make new vector, ambigdists, and test  whether dist is in it herre; if so, don't predict
                                         if args.predall == True:
                                                 realscore = genebitscores[truncdistances.index(rawdistances[invordervec[j]])]
-                                                mloutputfile.write('\t' + str(prediction) + '(Det:' + str(realscore) + ')')
-                                                highboundoutputfile.write('\t' + str(round(highprediction,2)) + '(Det)')
-                                                lowboundoutputfile.write('\t' + str(round(lowprediction,2)) + '(Det)')
-                                                pvaloutputfile.write('\t' + str(round(pval,2)) + '(Det)')
+                                                mloutputfile.write('\t' + str(prediction) + '(Ortholog_detected:' + str(realscore) + ')')
+                                                highboundoutputfile.write('\t' + str(round(highprediction,2)) + '(Ortholog_detected)')
+                                                lowboundoutputfile.write('\t' + str(round(lowprediction,2)) + '(Ortholog_detected)')
+                                                pvaloutputfile.write('\t' + str(round(pval,2)) + '(Ortholog_detected)')
                                         elif args.predall == False:
-                                                mloutputfile.write('\t' + 'Detected')
-                                                highboundoutputfile.write('\t' + 'Detected')
-                                                lowboundoutputfile.write('\t' + 'Detected')
-                                                pvaloutputfile.write('\t' + 'Detected')                                               
+                                                mloutputfile.write('\t' + 'Ortholog_detected')
+                                                highboundoutputfile.write('\t' + 'Ortholog_detected')
+                                                lowboundoutputfile.write('\t' + 'Ortholog_detected')
+                                                pvaloutputfile.write('\t' + 'Ortholog_detected')
+                                elif rawdistances[invordervec[j]] in ambigdists:
+                                        if args.predall == True:
+                                                mloutputfile.write('\t' + str(prediction) + 'Homolog_detected(orthology_ambiguous)')
+                                                highboundoutputfile.write('\t' + str(round(highprediction,2)) + 'Homolog_detected(orthology_ambiguous)')
+                                                lowboundoutputfile.write('\t' + str(round(lowprediction,2)) + 'Homolog_detected(orthology_ambiguous)')
+                                                pvaloutputfile.write('\t' + str(round(pval,2)) + 'Homolog_detected(orthology_ambiguous)')
+                                        elif args.predall == False:
+                                                mloutputfile.write('\t' + 'Homolog_detected(orthology_ambiguous)')
+                                                highboundoutputfile.write('\t' + 'Homolog_detected(orthology_ambiguous)')
+                                                lowboundoutputfile.write('\t' + 'Homolog_detected(orthology_ambiguous)')
+                                                pvaloutputfile.write('\t' + 'Homolog_detected(orthology_ambiguous)')
+                                
                         mloutputfile.write('\n')
                         highboundoutputfile.write('\n')
                         lowboundoutputfile.write('\n')
