@@ -1,0 +1,7 @@
+abSENSE analysis run on 02.05.2021_17.06
+Input bitscore file: Insect_Data/Insect_Bitscores
+Input distance file: Insect_Data/Insect_Distances
+Gene length file: Insect_Data/D_mel_Protein_Lengths
+Database length file: Insect_Data/Insect_Database_Lengths
+Species used in fit: All (default)
+E-value threshold: 0.001 (default)
