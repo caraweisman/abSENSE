@@ -16,6 +16,7 @@ import argparse
 from datetime import datetime
 from scipy import stats
 
+#!/usr/bin/env python
 
 ###### Define user inputs #####
 
