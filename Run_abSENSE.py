@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import print_function
 import numpy as np
 import glob
@@ -15,8 +17,6 @@ import warnings
 import argparse
 from datetime import datetime
 from scipy import stats
-
-#!/usr/bin/env python
 
 ###### Define user inputs #####
 
